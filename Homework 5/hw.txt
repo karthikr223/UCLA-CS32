@@ -1,0 +1,98 @@
+1.a.
+50
+    20
+	10
+	    xx
+	    15
+	40
+	    30
+		25
+		36
+	    xx
+    60
+	xx
+	70
+	    65
+	    80
+		74
+		xx
+
+
+b. Inorder - 10 15 20 25 30 36 40 50 60 65 70 74 80
+   Preorder - 50 20 10 15 40 30 25 36 60 70 65 80 74
+   Postorder - 15 10 25 36 30 40 20 65 74 80 70 60 50
+
+c. 
+50
+    15
+	10
+	40
+	    36
+		25
+		xx
+	    xx
+    60
+	xx
+	70
+	    65
+	    80
+		74
+		xx
+
+2.a. 
+struct Node {
+	int m_data;
+	Node* left;
+	Node* right;
+	Node* parent;
+};
+
+b.  Node* function addNode(Node* root, int data):
+	create node addedNode 
+	set addedNode->m_data to data
+	set left and right pointers to null
+	if root is nullptr:
+	    return addedNode
+	if added data is less than root->data:
+	    set root->left to addNode(root->left, data)
+	    set root->left->parent to root
+	if added data is more than root->data
+	    set root->right to addNode(root->right, data)
+	    set root->right->parent to root
+	return root
+
+3.a. 
+
+8
+    3
+	0
+	2
+    6
+	4
+	xx
+	
+b. int heap[1000]
+heap[0] = 8
+heap[1] = 3
+heap[2] = 6
+heap[3] = 0
+heap[4] = 2
+heap[5] = 4
+
+c. int heap[1000]
+heap[0] = 6
+heap[1] = 3
+heap[2] = 4
+heap[3] = 0
+heap[4] = 2
+
+4.
+a. O(C+S)
+b. O(logC+S)
+c. O(logC + logS)
+d. O(logS)
+e. O(1)
+f. O(logC+S)
+g. O(SlogS)
+h. O(ClogS)
+

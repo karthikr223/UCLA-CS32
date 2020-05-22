@@ -1,0 +1,31 @@
+2. First 12 coordinates popped off the stack -
+(4,3)
+(3,3)
+(5,3)
+(5,2)
+(5,1)
+(6,1)
+(7,1)
+(8,1)
+(8,2)
+(6,3)
+(4,4)
+(4,5)
+
+4. First 12 coordinates popped off queue - 
+
+(4,3)
+(4,4)
+(5,3)
+(3,3)
+(4,5)
+(6,3)
+(5,2)
+(4,6)
+(5,5)
+(5,1)
+(4,7)
+(6,5)
+
+The algorithm for both programs evaluates coordinates in the order east, south, west and then north. The stack algorithm pops off the coordinates in reverse priority to this - so if a valid coordinate exists on all sides of the previous point, they are popped off in the order north, west, south then east. This is because the last item added to the queue is the first item removed. In the queue program, the coordinates are popped off in the east, south, west, north order, since the first item added to the queue is the first one out.
+

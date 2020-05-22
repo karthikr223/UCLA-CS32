@@ -1,0 +1,193 @@
+1. The doubly-linked list contained a head dummy node and a tail dummy node. Each node had a previous and next node pointer, as well as storing one KeyType and one ValueType. The linked list was not circular - the prev pointer on the head dummy and next pointer on the tail dummy are always null pointers.
+
+2. insert function -
+if map is empty:
+	create new node with given arguments
+	link to head and tail pointers
+	return true
+else:
+	create pointer to first node
+	if map contains key:
+		return false
+	else:
+		add node to end of list
+		modify suitable tail pointers and last node pointers
+		increment map size
+		return true
+
+update function - 
+initialize pointer to first node
+repeat until pointer is nullptr:
+	if node key is equal to key argument:
+		update node value
+	set pointer to next node address
+
+insertOrUpdate function - 
+if map is empty:
+	create new node with given arguments
+	link to head and tail pointers
+	return true
+else:
+	create pointer to first node
+	if map contains key:
+		update value of node containing matching key
+	else:
+		add node to end of list
+		modify suitable tail pointers and last node pointers
+		increment map size
+		return true
+
+erase function - 
+initialize pointer to first node
+repeat until pointer is nullptr:
+	if pointed-to-node key is equal to key argument:
+		change next and prev pointers of surrounding nodes
+		delete node
+		decrement map size
+		return true
+	set pointer to next node address
+return false
+
+contains function - 
+initialize pointer to first node
+repeat until pointer is nullptr:
+	if pointed-to-node key is equal to key argument:
+		return true
+	set pointer to next node address
+return false
+
+2 argument get function -
+initialize pointer to first node
+repeat until pointer is nullptr:
+	if pointed-to-node key is equal to key argument:
+		set value argument to node value
+		return true
+	set pointer to next node address
+return false
+
+3 argument get function - 
+if integer argument i is between 0 and size():
+	initialize pointer to first node
+	repeat i times:
+		set pointer to next node address
+	set key argument to node key
+	set value argument to node argument
+	return true
+else:
+	return false
+
+combine function - 
+set return variable to true
+create temporary map
+repeat m1.size() times:
+	get key at loop counter position in the list
+	if key is present in map m2:
+		get corresponding value in m2
+		if value in m1 is equal to corresponding value in m2:
+			insert key and value into temporary map
+		else:
+			set return variable to false
+	else:
+		insert key and corresponding value in m1 into temporary map
+repeat m2.size() times:
+	get key at loop counter position in the list
+	if key is not present in map m1:
+		insert key and corresponding value in m2 into temporary map
+swap result and temporary map
+return the return variable
+
+subtract function - 
+create temporary map
+repeat m1.size() times:
+	get key at loop counter position in the list
+	if key is not in m2:
+		insert key and corresponding value in m1 into temporary map
+swap result and temporary map
+
+3. Test cases - performed on a map from strings to doubles
+
+Map m;
+assert(m.empty() && m.size()==0); //check if map is empty
+m.insert("Fred", 123);           //add two valid nodes
+m.insert("Lucy", 456);
+assert(!m.empty() && m.size()==2);//check if empty and size functions are working correctly
+assert(!m.insert("Fred", 123));  //check if insert function returns false when map already contains the key
+assert(m.size()==2);             //checks that map was not modified
+
+
+Map m2;
+m2 = m;               //check if assignment operator works, if it does, copy contructor(and swap function) also works correctly as it is called in the assignment operator
+Map m3(m);         //checking if copy constructor works separately
+assert(m.contains("Fred") && m.contains("Lucy") && m.size()==2);    
+assert(m2.contains("Fred") && m2.contains("Lucy") && m2.size()==2);
+assert(m3.contains("Fred") && m3.contains("Lucy") && m3.size()==2);
+
+m.update("Fred", 789);             //update a value
+assert(m.size()==2);
+KeyType k;
+ValueType v;
+m.get("Fred", v);      //check if update function worked correctly above, testing get when key is present
+assert(v== 789);
+assert(!m.update("Ethel", 123)); //checks if update function works correctly when map does not contain the name
+
+m.insertOrUpdate("Fred", 789);     //checks if insertorupdate works when the update is required
+m.insertOrUpdate("Ethel", 111);    //checks if insertorupdate works when the insert is required
+m.get("Fred", v);
+assert(v == 789 && m.size() == 3);
+assert(!m.erase("Ricky"));               //checks if erase does nothing when key is not present in map
+m.erase("Fred");                        //checks if erase function works when key is present
+m.erase("Lucy");
+m.erase("Ethel");
+assert(m.empty() && m.size()==0);
+m.insertOrUpdate("Fred", 123);          //checks if insertorupdate works when map is empty
+assert(m.contains("Fred") && m.size()==1);      //testing contains functions also
+assert(!m.contains("Lucy"));                  //contains function when key is not present
+
+m.swap(m2);                               //checking swap function
+assert(m.contains("Fred") && m.contains("Lucy") && m.size()==2); 
+assert(m2.contains("Fred") && m2.size()==1);
+
+assert(v==789);
+assert(!m.get("Ethel", v));               //checking get function when key is not present 
+assert(v==789);                         //v is unchanged
+
+KeyType all;                             //checking if 3 argument get function works as per spec
+ValueType total = 0;                       
+for (int n = 0; n < m.size(); n++)
+{
+    KeyType k;
+    ValueType v;
+    m.get(n, k, v);
+    all += k;
+    total += v;
+}
+assert(all == "FredLucy" && total == 579);  //checks if all the items of the list have been retrieved (579 is 123 + 456)
+
+assert(m.get(1,k,v)  &&  (k == "Fred"  ||  k == "Lucy"));  //calling get repeatedly with the same first parameter copies the same key and value each time
+KeyType k2;
+assert(m.get(1,k2,v)  &&  k2 == k);     
+
+Map m4(m);
+m4.insert("Ethel", 111);
+m4.insert("Ricky", 222);
+m4.erase("Lucy");
+assert(m.contains("Fred") && m.contains("Lucy") && m.size()==2); //contents of m
+assert(m4.contains("Fred") && m4.contains("Ethel")&& m4.contains("Ricky") && m4.size()==3); //contents of m4
+Map result;
+assert(combine(m,m4,result));
+assert(result.contains("Fred") && result.contains("Lucy") && result.contains("Ethel") &&result.contains("Ricky") && result.size()==4);   //checks if combine works when there are repeated names in both maps, as well as unique names
+combine(m,m4,result);
+assert(result.contains("Fred") && result.contains("Lucy") && result.contains("Ethel") &&result.contains("Ricky") && result.size()==4);  //checks if combine works when result is not empty
+combine(m,m4,m);
+assert(m.contains("Fred") && m.contains("Lucy") && m.contains("Ethel") && m.contains("Ricky") && result.size()==4); //check that combine works for aliasing
+m4.update("Fred", 789);
+assert(!combine(m,m4,result)); //combine should return false as value is different in both maps
+
+subtract(m,m4,result);        //testing subtract function when result is not empty
+assert(result.contains("Lucy"));
+subtract(m,m4,m);  //testing subtract function for aliasing
+
+
+
+
+
